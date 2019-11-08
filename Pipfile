@@ -8,6 +8,9 @@ verify_ssl = true
 [packages]
 bs4 = "*"
 selenium = "*"
+you-get = "*"
+lxml = "*"
+commands = "*"
 
 [requires]
 python_version = "3.6"
