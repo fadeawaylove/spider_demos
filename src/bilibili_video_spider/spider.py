@@ -8,22 +8,22 @@ from concurrent import futures
 
 class Spider(object):
 
-    def __init__(self, start_url, pools=5):
+    def __init__(self, start_url="", pools=5):
         self.start_url = start_url
         self.pools = pools
 
     def run(self):
-        video_name, video_info = self._get_playlist(self.start_url)
+        video_name, video_info = self.get_playlist(self.start_url)
         params_list = [[video["url"], video_name, video["title"]] for video in video_info]
         print(params_list)
-        self._multi_downloader(params_list, max_workers=4)
+        self.multi_downloader(params_list, max_workers=4)
 
-    def _multi_downloader(self, params_list, max_workers=5):
+    def multi_downloader(self, params_list, max_workers=5):
         with futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
             for params in params_list:
                 executor.submit(self._downloader, *params)
 
-    def _get_playlist(self, url):
+    def get_playlist(self, url):
         av = url.split("/")[-1][2:]
         playlist_url = "https://api.bilibili.com/x/web-interface/view?aid={}".format(av)
         response = requests.get(playlist_url).json()
